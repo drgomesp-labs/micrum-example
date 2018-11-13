@@ -18,7 +18,7 @@ enqueue:
     router_topic: 'adyen_events'
     router_queue: 'adyen_events'
     router_processor: Mercur\Payment\Messaging\Processor
-    default_processor_queue: default
+    default_processor_queue: 'adyen_events'
   consumption:
     # the time in milliseconds queue consumer waits for a message (100 ms by default)
     receive_timeout: 100

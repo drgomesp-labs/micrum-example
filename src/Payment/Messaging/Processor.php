@@ -15,8 +15,7 @@ class Processor implements \Interop\Queue\Processor, TopicSubscriberInterface
 {
 	public function process(Message $message, Context $context)
 	{
-		var_dump($message);
-		exit;
+		var_export($message);
 		return self::ACK;
 	}
 
