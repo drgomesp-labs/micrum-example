@@ -1,0 +1,81 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+
+services:
+  # default configuration for services in *this* file
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    public: false       # Allows optimizing the container by removing unused services; this also means
+    # fetching services directly from the container via $container->get() won't work.
+    # The best practice is to be explicit about your dependencies anyway.
+
+  Enqueue\RdKafka\RdKafkaConnectionFactory:
+    arguments:
+    - 'global':
+        'group.id': 'payment'
+        'bootstrap.servers': 'PLAINTEXT://kafka:9092'
+        'enable.auto.commit': 'false'
+        'socket.blocking.max.ms': '10'
+        'queue.buffering.max.ms': '10'
+        'fetch.wait.max.ms': '10'
+        'offset.store.method': 'broker'
+    - 'topic':
+        'auto.offset.reset': 'smallest'
+    - 'log_level': 1
+
+  Interop\Queue\ConnectionFactory:
+    alias: Enqueue\RdKafka\RdKafkaConnectionFactory
+
+  # makes classes in src/ available to be used as services
+  # this creates a service per class whose id is the fully-qualified class name
+  Mercur\:
+    resource: '../src/*'
+    exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+  Mercur\Payment\Messaging\Processor:
+    class:
+    calls:
+    - [process, ['@?', '@enqueue.transport.default.context']]
+
+  Mercur\Messaging\Factory\CommandFactory:
+    arguments:
+      $mappings:
+        'setupPaymentSession': '\Mercur\Payment\Command\SetupPaymentSession'
+
+  Mercur\Messaging\Factory\EventFactory:
+    arguments:
+      $mappings:
+        'adyenNotification': '\Mercur\Payment\Event\Adyen\NotificationReceivedEvent'
+
+  mercur.infrastructure.consumer.command:
+    class: Mercur\Messaging\Consumer
+    arguments:
+      $topicName: 'payment_commands'
+
+  mercur.infrastructure.consumer.event:
+    class: Mercur\Messaging\Consumer
+    arguments:
+      $topicName: 'adyen_events'
+
+  Mercur\Messaging\Processor\EventProcessor:
+    arguments:
+    - '@logger'
+    - '@Mercur\Messaging\Factory\EventFactory'
+    - '@message_bus'
+    - '%env(CONSUMER_EVENT_TOPIC)%'
+
+  Mercur\Payment\EntryPoint:
+    tags:
+    - { name: 'console.command', command: 'mercur:payment' }
+    arguments:
+    - '@logger'
+    - '@mercur.infrastructure.consumer.command'
+    - '@mercur.infrastructure.consumer.event'
+    - '@Mercur\Messaging\Processor\CommandProcessor'
+    - '@Mercur\Messaging\Processor\EventProcessor'
+

@@ -1,0 +1,29 @@
+enqueue:
+  transport:
+    connection_factory_class: Enqueue\RdKafka\RdKafkaConnectionFactory
+    dsn: '%env(ENQUEUE_DSN)%'
+    global:
+      group.id: 'payment'
+      bootstrap.servers: 'PLAINTEXT://kafka:9092'
+      enable.auto.commit: 'false'
+      socket.blocking.max.ms: '10'
+      queue.buffering.max.ms: '10'
+      fetch.wait.max.ms: '10'
+      offset.store.method: 'broker'
+    topic:
+      auto.offset.reset: 'smallest'
+  client:
+    prefix: ''
+    app_name: ''
+    router_topic: 'adyen_events'
+    router_queue: 'adyen_events'
+    router_processor: Mercur\Payment\Messaging\Processor
+    default_processor_queue: default
+  consumption:
+    # the time in milliseconds queue consumer waits for a message (100 ms by default)
+    receive_timeout: 100
+#  extensions:
+#    doctrine_ping_connection_extension: false
+#    doctrine_clear_identity_map_extension: false
+#    signal_extension:     true
+#    reply_extension:      true

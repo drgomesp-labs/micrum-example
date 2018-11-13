@@ -1,0 +1,167 @@
+{
+    "enqueue/amqp-tools": {
+        "version": "0.8.40"
+    },
+    "enqueue/async-event-dispatcher": {
+        "version": "0.7",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "0.7",
+            "ref": "9e937ccb79e08b978f91fb816d4e6d645813113a"
+        }
+    },
+    "enqueue/dsn": {
+        "version": "0.9.x-dev"
+    },
+    "enqueue/enqueue": {
+        "version": "0.8.40"
+    },
+    "enqueue/enqueue-bundle": {
+        "version": "0.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "0.4",
+            "ref": "daaea0035c3abd612f71f0288d5c20197c3c34ad"
+        }
+    },
+    "enqueue/messenger-adapter": {
+        "version": "0.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "0.1",
+            "ref": "9a7119f609b576a30dbf03e4fe44212388e96ea1"
+        }
+    },
+    "enqueue/null": {
+        "version": "0.8.40"
+    },
+    "enqueue/rdkafka": {
+        "version": "0.8",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "0.8",
+            "ref": "bd8104c0f393f98da53160df5b0cbc6cfa4add2f"
+        }
+    },
+    "monolog/monolog": {
+        "version": "2.x-dev"
+    },
+    "psr/cache": {
+        "version": "1.0.1"
+    },
+    "psr/container": {
+        "version": "1.0.0"
+    },
+    "psr/log": {
+        "version": "1.0.2"
+    },
+    "psr/simple-cache": {
+        "version": "1.0.1"
+    },
+    "queue-interop/amqp-interop": {
+        "version": "0.7.5"
+    },
+    "queue-interop/queue-interop": {
+        "version": "0.6.2"
+    },
+    "ramsey/uuid": {
+        "version": "3.8.0"
+    },
+    "symfony/cache": {
+        "version": "v4.1.7"
+    },
+    "symfony/config": {
+        "version": "v4.1.7"
+    },
+    "symfony/console": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "b5026d7ffdb43b4d66f4cc091b1e6f94e6023986"
+        }
+    },
+    "symfony/contracts": {
+        "version": "1.0-dev"
+    },
+    "symfony/debug": {
+        "version": "v4.1.7"
+    },
+    "symfony/dependency-injection": {
+        "version": "v4.1.7"
+    },
+    "symfony/dotenv": {
+        "version": "v4.1.7"
+    },
+    "symfony/event-dispatcher": {
+        "version": "v4.1.7"
+    },
+    "symfony/filesystem": {
+        "version": "v4.1.7"
+    },
+    "symfony/finder": {
+        "version": "v4.1.7"
+    },
+    "symfony/flex": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "af2424f599372e25bd03f23b06a5250e7171ce33"
+        }
+    },
+    "symfony/framework-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "e37c90eb1c9b30ac59e094e2daa7755a33d60edb"
+        }
+    },
+    "symfony/http-foundation": {
+        "version": "v4.1.7"
+    },
+    "symfony/http-kernel": {
+        "version": "v4.1.7"
+    },
+    "symfony/messenger": {
+        "version": "4.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.1",
+            "ref": "f11dfa18618a8a5dd853ea3a302db2e0557e031c"
+        }
+    },
+    "symfony/options-resolver": {
+        "version": "v4.1.7"
+    },
+    "symfony/polyfill-mbstring": {
+        "version": "v1.10.0"
+    },
+    "symfony/routing": {
+        "version": "4.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.0",
+            "ref": "5f514d9d3b8a8aac3d62ae6a86b18b90ed0c7826"
+        }
+    },
+    "symfony/serializer": {
+        "version": "4.2-dev"
+    },
+    "symfony/var-exporter": {
+        "version": "4.2-dev"
+    },
+    "symfony/yaml": {
+        "version": "v4.1.7"
+    }
+}

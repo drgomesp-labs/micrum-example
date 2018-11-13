@@ -1,0 +1,13 @@
+version: '2'
+services:
+  n_payment_php:
+    container_name: n_payment_php
+    build:
+      context: ./.docker
+      dockerfile: Dockerfile
+    volumes:
+    - .:/var/www
+    environment:
+    - COMPOSE_PROJECT_NAME=mercur
+    - PHP_IDE_CONFIG=serverName=n_payment
+    - XDEBUG_CONFIG=remote_port=10000 idekey=n_payment remote_host=docker.for.mac.localhost profiler_enable=1
