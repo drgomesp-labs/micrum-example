@@ -8,6 +8,7 @@ services:
     volumes:
     - .:/var/www
     environment:
+    - SHELL_VERBOSITY=3
     - COMPOSE_PROJECT_NAME=mercur
     - PHP_IDE_CONFIG=serverName=n_payment
     - XDEBUG_CONFIG=remote_port=10000 idekey=n_payment remote_host=docker.for.mac.localhost profiler_enable=1

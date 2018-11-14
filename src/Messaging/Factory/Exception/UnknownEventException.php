@@ -26,6 +26,6 @@ class UnknownEventException extends \RuntimeException
 	 */
 	public static function withEventClassName(string $eventClassName): self
 	{
-		return new UnknownEventException(sprintf('Event class with name "%s" could not be found.', $eventClassName));
+		return new self(sprintf('Event class with name "%s" could not be found.', $eventClassName));
 	}
 }

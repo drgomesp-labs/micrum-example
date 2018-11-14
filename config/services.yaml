@@ -37,8 +37,11 @@ services:
     resource: '../src/*'
     exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
 
-  Mercur\Payment\Messaging\Processor:
-    class:
+  Mercur\Messaging\Processor\CommandProcessor:
+    calls:
+    - [process, ['@?', '@enqueue.transport.default.context']]
+
+  Mercur\Messaging\Processor\EventProcessor:
     calls:
     - [process, ['@?', '@enqueue.transport.default.context']]
 
@@ -50,32 +53,5 @@ services:
   Mercur\Messaging\Factory\EventFactory:
     arguments:
       $mappings:
-        'adyenNotification': '\Mercur\Payment\Event\Adyen\NotificationReceivedEvent'
-
-  mercur.infrastructure.consumer.command:
-    class: Mercur\Messaging\Consumer
-    arguments:
-      $topicName: 'payment_commands'
-
-  mercur.infrastructure.consumer.event:
-    class: Mercur\Messaging\Consumer
-    arguments:
-      $topicName: 'adyen_events'
-
-  Mercur\Messaging\Processor\EventProcessor:
-    arguments:
-    - '@logger'
-    - '@Mercur\Messaging\Factory\EventFactory'
-    - '@message_bus'
-    - '%env(CONSUMER_EVENT_TOPIC)%'
-
-  Mercur\Payment\EntryPoint:
-    tags:
-    - { name: 'console.command', command: 'mercur:payment' }
-    arguments:
-    - '@logger'
-    - '@mercur.infrastructure.consumer.command'
-    - '@mercur.infrastructure.consumer.event'
-    - '@Mercur\Messaging\Processor\CommandProcessor'
-    - '@Mercur\Messaging\Processor\EventProcessor'
+        'AdyenNotification': '\Mercur\Payment\Event\Adyen\NotificationReceivedEvent'
 

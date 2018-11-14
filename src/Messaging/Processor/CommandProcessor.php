@@ -2,9 +2,10 @@
 
 namespace Mercur\Messaging\Processor;
 
+use Interop\Queue\Context;
 use Interop\Queue\Message;
+use Interop\Queue\Processor;
 use Mercur\Messaging\Factory\CommandFactory;
-use Mercur\Messaging\Processor;
 use Mercur\Messaging\Processor\Exception\ProcessingException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -48,11 +49,11 @@ final class CommandProcessor implements Processor
 		$this->commandFactory = $commandFactory;
 	}
 
-	public function process(Message $msg): void
+	public function process(Message $message, Context $context)
 	{
 		try {
-			$body = json_decode($msg->getBody(), true);
-			$payload = $body['data'] + ['headers' => $msg->getHeaders()];
+			$body = json_decode($message->getBody(), true);
+			$payload = $body['data'] + ['headers' => $message->getHeaders()];
 
 			$command = $this->commandFactory->create($body['message'], $payload);
 
@@ -62,5 +63,7 @@ final class CommandProcessor implements Processor
 		} catch (\Throwable $e) {
 			throw new ProcessingException('Failed to process command', $e->getCode(), $e);
 		}
+
+		return self::ACK;
 	}
 }

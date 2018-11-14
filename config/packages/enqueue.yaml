@@ -17,11 +17,11 @@ enqueue:
     app_name: ''
     router_topic: 'adyen_events'
     router_queue: 'adyen_events'
-    router_processor: Mercur\Payment\Messaging\Processor
+    router_processor: Mercur\Messaging\Processor\EventProcessor
     default_processor_queue: 'adyen_events'
   consumption:
     # the time in milliseconds queue consumer waits for a message (100 ms by default)
-    receive_timeout: 100
+    receive_timeout: 10
 #  extensions:
 #    doctrine_ping_connection_extension: false
 #    doctrine_clear_identity_map_extension: false

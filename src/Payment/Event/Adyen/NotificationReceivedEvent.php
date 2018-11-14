@@ -2,25 +2,43 @@
 
 namespace Mercur\Payment\Event\Adyen;
 
+use Mercur\Messaging\DomainEvent;
+use Money\Money;
+
 /**
  * Class NotificationReceivedEvent
  *
  * @package Mercur\Payment\Event\Adyen
  */
-final class NotificationReceivedEvent
+final class NotificationReceivedEvent extends DomainEvent
 {
 	/**
-	 * @var array
+	 * @var Money
 	 */
-	private $payload;
+	private $amount;
 
 	/**
-	 * NotificationReceivedEvent constructor.
-	 *
-	 * @param array $payload
+	 * @return Money
 	 */
-	public function __construct(array $payload)
+	public function amount(): Money
 	{
-		$this->payload = $payload;
+		if (empty($this->amount)) {
+			$this->amount = Money::EUR($this->amount);
+		}
+
+		return $this->amount;
+	}
+
+	/**
+	 * @param int $amount
+	 *
+	 * @return NotificationReceivedEvent
+	 */
+	public function withAmount(int $amount): self
+	{
+		$clone = clone $this;
+		$clone->amount = Money::EUR($amount);
+
+		return $clone;
 	}
 }

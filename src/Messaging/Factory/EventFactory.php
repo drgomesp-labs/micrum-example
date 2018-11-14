@@ -2,7 +2,11 @@
 
 namespace Mercur\Messaging\Factory;
 
+use Mercur\Messaging\DomainEvent;
+use Mercur\Messaging\Factory\Exception\EventRaisingException;
+use Mercur\Messaging\Factory\Exception\InvalidEventClassException;
 use Mercur\Messaging\Factory\Exception\UnknownEventException;
+use Mercur\Messaging\Message\Payload;
 
 /**
  * Class EventFactory
@@ -29,12 +33,13 @@ final class EventFactory
 	/**
 	 * @param string $eventName
 	 * @param array  $payload
+	 * @param array  $headers
 	 *
 	 * @return mixed
 	 *
 	 * @throws UnknownEventException
 	 */
-	public function create(string $eventName, array $payload)
+	public function create(string $eventName, array $payload, array $headers = [])
 	{
 		if (!isset($this->mappings[$eventName])) {
 			throw UnknownEventException::withEventName($eventName);
@@ -46,6 +51,14 @@ final class EventFactory
 			throw UnknownEventException::withEventClassName($eventClassName);
 		}
 
-		return new $eventClassName($payload);
+		if (!is_subclass_of($eventClassName, DomainEvent::class, true)) {
+			throw InvalidEventClassException::withEventClassName($eventClassName);
+		}
+
+		try {
+			return forward_static_call([$eventClassName, 'occur'], $payload, ['_headers' => $headers]);
+		} catch (\Throwable $e) {
+			throw new EventRaisingException('Could not raise event', 0, $e);
+		}
 	}
 }

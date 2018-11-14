@@ -2,8 +2,8 @@
 
 namespace Mercur\Messaging;
 
-use Micrum\Messaging\Message\Metadata;
-use Micrum\Messaging\Message\Payload;
+use Mercur\Messaging\Message\Metadata;
+use Mercur\Messaging\Message\Payload;
 use Ramsey\Uuid\UuidInterface;
 
 /**

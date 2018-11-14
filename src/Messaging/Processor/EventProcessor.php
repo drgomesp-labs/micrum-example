@@ -2,11 +2,12 @@
 
 namespace Mercur\Messaging\Processor;
 
-use Enqueue\MessengerAdapter\EnvelopeItem\TransportConfiguration;
+use Enqueue\Client\TopicSubscriberInterface;
+use Interop\Queue\Context;
 use Interop\Queue\Message;
+use Interop\Queue\Processor;
 use Mercur\Messaging\Factory\EventFactory;
-use Mercur\Messaging\Processor;
-use Mercur\Messaging\Processor\Exception\ProcessingException;
+use Mercur\Messaging\Factory\Exception\UnknownEventException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -16,7 +17,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
  *
  * @package Mercur\Messaging\Processor
  */
-final class EventProcessor implements Processor
+final class EventProcessor implements Processor, TopicSubscriberInterface
 {
 	/**
 	 * @var LoggerInterface
@@ -34,45 +35,48 @@ final class EventProcessor implements Processor
 	private $bus;
 
 	/**
-	 * @var string
-	 */
-	private $eventTopicName;
-
-	/**
 	 * EventProcessor constructor.
 	 *
 	 * @param LoggerInterface     $logger
 	 * @param EventFactory        $eventFactory
 	 * @param MessageBusInterface $bus
-	 * @param string              $eventTopicName
 	 */
 	public function __construct(
 		LoggerInterface $logger,
 		EventFactory $eventFactory,
-		MessageBusInterface $bus,
-		string $eventTopicName
+		MessageBusInterface $bus
 	) {
 		$this->logger = $logger;
 		$this->eventFactory = $eventFactory;
 		$this->bus = $bus;
-		$this->eventTopicName = $eventTopicName;
 	}
 
-	public function process(Message $msg): void
+	public function process(Message $message, Context $context)
 	{
 		try {
-			$body = json_decode($msg->getBody(), true);
-			$payload = $body['data'] + ['headers' => $msg->getHeaders()];
-
-			$event = $this->eventFactory->create($body['message'], $payload);
-
-			$this->logger->debug(sprintf('Processing event', ['event' => $event]));
-
-			$this->bus->dispatch((new Envelope($event))->with(new TransportConfiguration([
-				'topic' => $this->eventTopicName,
-			])));
+			$body = json_decode($message->getBody(), true);
+			$event = $this->eventFactory->create($body['message'], $body['data'], $message->getHeaders());
+			$this->bus->dispatch(new Envelope($event));
+		} catch (UnknownEventException $e) {
+			$this->logger->notice($e->getMessage(), [
+				'class' => \get_class($message),
+				'message' => $message,
+			]);
 		} catch (\Throwable $e) {
-			throw new ProcessingException(sprintf('Failed to process event (%s)', $e->getMessage()), $e->getCode(), $e);
+			$this->logger->error('Failed to process event', [
+				'message' => $message,
+				'error' => $e->getMessage(),
+				'stacktrace' => $e->getTraceAsString(),
+			]);
+
+			return self::ACK;
 		}
+
+		return self::ACK;
+	}
+
+	public static function getSubscribedTopics()
+	{
+		return 'adyen_events';
 	}
 }

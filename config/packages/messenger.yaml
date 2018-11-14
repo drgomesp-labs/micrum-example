@@ -2,3 +2,6 @@ framework:
   messenger:
     transports:
       rdkafka: enqueue://default
+    buses:
+      messenger.bus.default:
+        middleware: ~

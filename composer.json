@@ -10,10 +10,11 @@
     "enqueue/enqueue-bundle": "^0.9@dev",
     "enqueue/messenger-adapter": "*@dev",
     "enqueue/rdkafka": "^0.9@dev",
-    "monolog/monolog": "^2.0@dev",
-    "symfony/console": "*",
+    "moneyphp/money": "^3.0@dev",
+    "symfony/console": "*@dev",
     "symfony/flex": "^1.1",
     "symfony/framework-bundle": "*",
+    "symfony/monolog-bundle": "*@dev",
     "symfony/serializer": "4.2.*",
     "symfony/yaml": "*"
   },
