@@ -3,13 +3,14 @@
 namespace Mercur\Messaging\Factory;
 
 use Mercur\Messaging\Factory\Exception\UnknownCommandException;
+use Mercur\Messaging\Message;
 
 /**
  * Class CommandFactory
  *
  * @package Mercur\Messaging\Factory
  */
-final class CommandFactory
+final class CommandFactory implements MessageFactory
 {
 	/**
 	 * @var array
@@ -26,15 +27,7 @@ final class CommandFactory
 		$this->mappings = $mappings;
 	}
 
-	/**
-	 * @param string $commandName
-	 * @param array  $payload
-	 *
-	 * @return mixed
-	 *
-	 * @throws UnknownCommandException
-	 */
-	public function create(string $commandName, array $payload)
+	public function create(string $commandName, array $payload, array $headers = []): Message
 	{
 		if (!isset($this->mappings[$commandName])) {
 			throw UnknownCommandException::withCommandName($commandName);

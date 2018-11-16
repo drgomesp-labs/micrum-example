@@ -1,7 +1,15 @@
 framework:
   messenger:
+    default_bus: messenger.bus.events
+
     transports:
-      rdkafka: enqueue://default
+      commands: enqueue://commands
+      events: enqueue://events
+
     buses:
-      messenger.bus.default:
+      messenger.bus.commands:
         middleware: ~
+
+      messenger.bus.events:
+        middleware:
+        - Mercur\Messaging\Middleware\TolerateNoHandler

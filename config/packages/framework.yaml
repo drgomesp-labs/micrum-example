@@ -31,4 +31,4 @@ framework:
 
   messenger:
     routing:
-      'Mercur\Payment\Event\PaymentWasSuccessful': rdkafka
+      'Mercur\Payment\Event\PaymentWasSuccessful': events

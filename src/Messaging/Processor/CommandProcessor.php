@@ -25,7 +25,7 @@ final class CommandProcessor implements Processor
 	/**
 	 * @var MessageBusInterface
 	 */
-	private $messageBus;
+	private $commandBus;
 
 	/**
 	 * @var CommandFactory
@@ -36,16 +36,16 @@ final class CommandProcessor implements Processor
 	 * CommandProcessor constructor.
 	 *
 	 * @param LoggerInterface     $logger
-	 * @param MessageBusInterface $messageBus
+	 * @param MessageBusInterface $commandBus
 	 * @param CommandFactory      $commandFactory
 	 */
 	public function __construct(
 		LoggerInterface $logger,
-		MessageBusInterface $messageBus,
+		MessageBusInterface $commandBus,
 		CommandFactory $commandFactory
 	) {
 		$this->logger = $logger;
-		$this->messageBus = $messageBus;
+		$this->commandBus = $commandBus;
 		$this->commandFactory = $commandFactory;
 	}
 
@@ -59,7 +59,7 @@ final class CommandProcessor implements Processor
 
 			$this->logger->debug(sprintf('Processing command', ['command' => $command]));
 
-			$this->messageBus->dispatch($command);
+			$this->commandBus->dispatch($command);
 		} catch (\Throwable $e) {
 			throw new ProcessingException('Failed to process command', $e->getCode(), $e);
 		}

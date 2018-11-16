@@ -25,30 +25,30 @@ final class EventProcessor implements Processor, TopicSubscriberInterface
 	private $logger;
 
 	/**
+	 * @var MessageBusInterface
+	 */
+	private $eventBus;
+
+	/**
 	 * @var EventFactory
 	 */
 	private $eventFactory;
 
 	/**
-	 * @var MessageBusInterface
-	 */
-	private $bus;
-
-	/**
 	 * EventProcessor constructor.
 	 *
 	 * @param LoggerInterface     $logger
+	 * @param MessageBusInterface $eventBus
 	 * @param EventFactory        $eventFactory
-	 * @param MessageBusInterface $bus
 	 */
 	public function __construct(
 		LoggerInterface $logger,
-		EventFactory $eventFactory,
-		MessageBusInterface $bus
+		MessageBusInterface $eventBus,
+		EventFactory $eventFactory
 	) {
 		$this->logger = $logger;
+		$this->eventBus = $eventBus;
 		$this->eventFactory = $eventFactory;
-		$this->bus = $bus;
 	}
 
 	public function process(Message $message, Context $context)
@@ -56,12 +56,9 @@ final class EventProcessor implements Processor, TopicSubscriberInterface
 		try {
 			$body = json_decode($message->getBody(), true);
 			$event = $this->eventFactory->create($body['message'], $body['data'], $message->getHeaders());
-			$this->bus->dispatch(new Envelope($event));
+			$this->eventBus->dispatch(new Envelope($event));
 		} catch (UnknownEventException $e) {
-			$this->logger->notice($e->getMessage(), [
-				'class' => \get_class($message),
-				'message' => $message,
-			]);
+			throw $e;
 		} catch (\Throwable $e) {
 			$this->logger->error('Failed to process event', [
 				'message' => $message,
@@ -77,6 +74,6 @@ final class EventProcessor implements Processor, TopicSubscriberInterface
 
 	public static function getSubscribedTopics()
 	{
-		return 'adyen_events';
+		return 'payment_events';
 	}
 }

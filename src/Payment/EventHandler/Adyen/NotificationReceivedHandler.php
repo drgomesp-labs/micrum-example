@@ -2,10 +2,10 @@
 
 namespace Mercur\Payment\EventHandler\Adyen;
 
-use Enqueue\Client\ProducerInterface;
 use Mercur\Payment\Event\Adyen\NotificationReceivedEvent;
 use Mercur\Payment\Event\PaymentWasSuccessful;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
  * Class NotificationReceivedHandler
@@ -15,18 +15,18 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 class NotificationReceivedHandler implements MessageHandlerInterface
 {
 	/**
-	 * @var ProducerInterface
+	 * @var MessageBusInterface
 	 */
-	private $producer;
+	private $eventBus;
 
 	/**
 	 * NotificationReceivedHandler constructor.
 	 *
-	 * @param ProducerInterface $producer
+	 * @param MessageBusInterface $eventBus
 	 */
-	public function __construct(ProducerInterface $producer)
+	public function __construct(MessageBusInterface $eventBus)
 	{
-		$this->producer = $producer;
+		$this->eventBus = $eventBus;
 	}
 
 	/**
@@ -36,6 +36,6 @@ class NotificationReceivedHandler implements MessageHandlerInterface
 	 */
 	public function __invoke(NotificationReceivedEvent $event): void
 	{
-		$this->producer->sendEvent('adyen_events', PaymentWasSuccessful::occur(['amount' => 333]));
+		$this->eventBus->dispatch(PaymentWasSuccessful::occur(['amount' => 333]));
 	}
 }

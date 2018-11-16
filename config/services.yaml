@@ -13,6 +13,9 @@ services:
     public: false       # Allows optimizing the container by removing unused services; this also means
     # fetching services directly from the container via $container->get() won't work.
     # The best practice is to be explicit about your dependencies anyway.
+    bind:
+      $commandBus: '@messenger.bus.commands'
+      $eventBus: '@messenger.bus.events'
 
   Enqueue\RdKafka\RdKafkaConnectionFactory:
     arguments:
@@ -28,9 +31,6 @@ services:
         'auto.offset.reset': 'smallest'
     - 'log_level': 1
 
-  Interop\Queue\ConnectionFactory:
-    alias: Enqueue\RdKafka\RdKafkaConnectionFactory
-
   # makes classes in src/ available to be used as services
   # this creates a service per class whose id is the fully-qualified class name
   Mercur\:
@@ -39,19 +39,19 @@ services:
 
   Mercur\Messaging\Processor\CommandProcessor:
     calls:
-    - [process, ['@?', '@enqueue.transport.default.context']]
+    - [process, ['@?', '@enqueue.transport.commands.context']]
 
   Mercur\Messaging\Processor\EventProcessor:
     calls:
-    - [process, ['@?', '@enqueue.transport.default.context']]
+    - [process, ['@?', '@enqueue.transport.events.context']]
 
   Mercur\Messaging\Factory\CommandFactory:
     arguments:
       $mappings:
-        'setupPaymentSession': '\Mercur\Payment\Command\SetupPaymentSession'
+        setupPaymentSession: Mercur\Payment\Command\SetupPaymentSession
 
   Mercur\Messaging\Factory\EventFactory:
     arguments:
       $mappings:
-        'AdyenNotification': '\Mercur\Payment\Event\Adyen\NotificationReceivedEvent'
+        AdyenNotification: Mercur\Payment\Event\Adyen\NotificationReceivedEvent
 

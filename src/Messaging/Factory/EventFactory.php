@@ -6,14 +6,14 @@ use Mercur\Messaging\DomainEvent;
 use Mercur\Messaging\Factory\Exception\EventRaisingException;
 use Mercur\Messaging\Factory\Exception\InvalidEventClassException;
 use Mercur\Messaging\Factory\Exception\UnknownEventException;
-use Mercur\Messaging\Message\Payload;
+use Mercur\Messaging\Message;
 
 /**
  * Class EventFactory
  *
  * @package Mercur\Messaging\Factory
  */
-final class EventFactory
+final class EventFactory implements MessageFactory
 {
 	/**
 	 * @var array
@@ -29,17 +29,8 @@ final class EventFactory
 	{
 		$this->mappings = $mappings;
 	}
-
-	/**
-	 * @param string $eventName
-	 * @param array  $payload
-	 * @param array  $headers
-	 *
-	 * @return mixed
-	 *
-	 * @throws UnknownEventException
-	 */
-	public function create(string $eventName, array $payload, array $headers = [])
+	
+	public function create(string $eventName, array $payload, array $headers = []): Message
 	{
 		if (!isset($this->mappings[$eventName])) {
 			throw UnknownEventException::withEventName($eventName);
