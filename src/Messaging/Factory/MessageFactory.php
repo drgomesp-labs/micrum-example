@@ -14,11 +14,11 @@ interface MessageFactory
 	/**
 	 * Creates an event of the type defined in as the message name, given a payload and some headers.
 	 *
-	 * @param string $messageName
+	 * @param string $messageClassName
 	 * @param array  $payload
 	 * @param array  $headers
 	 *
 	 * @return Message
 	 */
-	public function create(string $messageName, array $payload, array $headers = []): Message;
+	public function create(string $messageClassName, array $payload, array $headers = []): Message;
 }

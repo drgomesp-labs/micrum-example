@@ -4,7 +4,6 @@ namespace Mercur\Messaging;
 
 use Mercur\Messaging\Message\Metadata;
 use Mercur\Messaging\Message\Payload;
-use Ramsey\Uuid\UuidInterface;
 
 /**
  * Defines the most basic interface of a message.
@@ -13,13 +12,6 @@ use Ramsey\Uuid\UuidInterface;
  */
 interface Message extends \JsonSerializable
 {
-	/**
-	 * Returns the message unique identifier.
-	 *
-	 * @return UuidInterface
-	 */
-	public function id(): UuidInterface;
-
 	/**
 	 * Returns the message metadata.
 	 *
@@ -33,13 +25,4 @@ interface Message extends \JsonSerializable
 	 * @return Payload
 	 */
 	public function payload(): Payload;
-
-	/**
-	 * Returns a copy of this message, with the added metadata.
-	 *
-	 * @param Metadata $metadata
-	 *
-	 * @return Message
-	 */
-	public function addMetadata(Metadata $metadata): Message;
 }

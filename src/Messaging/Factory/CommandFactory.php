@@ -2,8 +2,11 @@
 
 namespace Mercur\Messaging\Factory;
 
+use Mercur\Messaging\CommandMessage;
+use Mercur\Messaging\Factory\Exception\InvalidCommandClassException;
 use Mercur\Messaging\Factory\Exception\UnknownCommandException;
 use Mercur\Messaging\Message;
+use Mercur\Messaging\Message\Payload;
 
 /**
  * Class CommandFactory
@@ -27,18 +30,22 @@ final class CommandFactory implements MessageFactory
 		$this->mappings = $mappings;
 	}
 
-	public function create(string $commandName, array $payload, array $headers = []): Message
+	public function create(string $messageClassName, array $payload, array $headers = []): Message
 	{
-		if (!isset($this->mappings[$commandName])) {
-			throw UnknownCommandException::withCommandName($commandName);
+		if (!isset($this->mappings[$messageClassName])) {
+			throw UnknownCommandException::withCommandName($messageClassName);
 		}
 
-		$commandClassName = $this->mappings[$commandName];
+		$commandClassName = $this->mappings[$messageClassName];
 
 		if (!class_exists($commandClassName)) {
-			throw UnknownCommandException::withCommandName($commandClassName);
+			throw UnknownCommandException::withCommandClassName($commandClassName);
 		}
 
-		return new $commandClassName($payload);
+		if (!is_subclass_of($commandClassName, CommandMessage::class, true)) {
+			throw InvalidCommandClassException::withCommandClassName($commandClassName);
+		}
+
+		return new $commandClassName(Payload::fromArray($payload));
 	}
 }

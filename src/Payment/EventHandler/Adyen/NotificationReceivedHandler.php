@@ -3,7 +3,7 @@
 namespace Mercur\Payment\EventHandler\Adyen;
 
 use Mercur\Payment\Event\Adyen\NotificationReceivedEvent;
-use Mercur\Payment\Event\PaymentWasSuccessful;
+use Mercur\Payment\Event\PaymentReceived;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -36,6 +36,6 @@ class NotificationReceivedHandler implements MessageHandlerInterface
 	 */
 	public function __invoke(NotificationReceivedEvent $event): void
 	{
-		$this->eventBus->dispatch(PaymentWasSuccessful::occur(['amount' => 333]));
+		$this->eventBus->dispatch(PaymentReceived::occur(['amount' => 333]));
 	}
 }

@@ -6,11 +6,11 @@ use Mercur\Messaging\DomainEvent;
 use Money\Money;
 
 /**
- * Class PaymentWasSuccessful
+ * Class PaymentReceived
  *
  * @package Mercur\Payment\Event
  */
-class PaymentWasSuccessful extends DomainEvent
+class PaymentReceived extends DomainEvent
 {
 	/**
 	 * @var Money
@@ -18,7 +18,7 @@ class PaymentWasSuccessful extends DomainEvent
 	protected $amount;
 
 	/**
-	 * PaymentWasSuccessful constructor.
+	 * PaymentReceived constructor.
 	 *
 	 * @param int $amount
 	 *
@@ -36,7 +36,7 @@ class PaymentWasSuccessful extends DomainEvent
 	/**
 	 * @return Money
 	 */
-	public function getAmount(): Money
+	public function amount(): Money
 	{
 		if (empty($this->amount)) {
 			$this->amount = Money::EUR($this->amount);

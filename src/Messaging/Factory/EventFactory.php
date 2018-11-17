@@ -30,13 +30,13 @@ final class EventFactory implements MessageFactory
 		$this->mappings = $mappings;
 	}
 	
-	public function create(string $eventName, array $payload, array $headers = []): Message
+	public function create(string $eventClassName, array $payload, array $headers = []): Message
 	{
-		if (!isset($this->mappings[$eventName])) {
-			throw UnknownEventException::withEventName($eventName);
+		if (!isset($this->mappings[$eventClassName])) {
+			throw UnknownEventException::withEventName($eventClassName);
 		}
 
-		$eventClassName = $this->mappings[$eventName];
+		$eventClassName = $this->mappings[$eventClassName];
 
 		if (!class_exists($eventClassName)) {
 			throw UnknownEventException::withEventClassName($eventClassName);

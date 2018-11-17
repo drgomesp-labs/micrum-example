@@ -2,6 +2,7 @@
 
 namespace Mercur\Messaging\Processor;
 
+use Enqueue\Client\TopicSubscriberInterface;
 use Interop\Queue\Context;
 use Interop\Queue\Message;
 use Interop\Queue\Processor;
@@ -15,7 +16,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
  *
  * @package Mercur\Messaging\Processor
  */
-final class CommandProcessor implements Processor
+final class CommandProcessor implements Processor, TopicSubscriberInterface
 {
 	/**
 	 * @var LoggerInterface
@@ -65,5 +66,10 @@ final class CommandProcessor implements Processor
 		}
 
 		return self::ACK;
+	}
+
+	public static function getSubscribedTopics()
+	{
+		return 'payment_commands';
 	}
 }

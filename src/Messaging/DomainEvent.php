@@ -16,6 +16,8 @@ use Ramsey\Uuid\UuidInterface;
  */
 class DomainEvent implements EventMessage
 {
+	use MessageTrait;
+
 	/**
 	 * @var Uuid
 	 */
@@ -26,20 +28,15 @@ class DomainEvent implements EventMessage
 	 */
 	protected $time;
 
-	/**
-	 * @var Metadata
-	 */
-	protected $metadata;
+	public function id(): UuidInterface
+	{
+		return $this->id;
+	}
 
-	/**
-	 * @var Payload
-	 */
-	protected $payload;
-
-	/**
-	 * @var string
-	 */
-	protected $messageName;
+	public function time(): DateTime
+	{
+		return $this->time;
+	}
 
 	/**
 	 * DomainMessage constructor.
@@ -57,39 +54,11 @@ class DomainEvent implements EventMessage
 		Metadata $metadata,
 		Payload $payload
 	) {
-		$this->id = $id;
 		$this->time = $occurredAt;
+		$this->id = $id;
 		$this->metadata = $metadata;
 		$this->payload = $payload;
 		$this->messageName = get_called_class();
-	}
-
-	public function id(): UuidInterface
-	{
-		return $this->id;
-	}
-
-	public function time(): DateTime
-	{
-		return $this->time;
-	}
-
-	public function metadata(): Metadata
-	{
-		return $this->metadata;
-	}
-
-	public function payload(): Payload
-	{
-		return $this->payload;
-	}
-
-	public function addMetadata(Metadata $metadata): Message
-	{
-		$clone = clone $this;
-		$clone->metadata = $metadata->merge($this->metadata);
-
-		return $clone;
 	}
 
 	/**

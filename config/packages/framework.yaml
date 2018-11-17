@@ -31,4 +31,5 @@ framework:
 
   messenger:
     routing:
-      'Mercur\Payment\Event\PaymentWasSuccessful': events
+      '\Mercur\Payment\Command\SetupPaymentSession': commands
+      '\Mercur\Payment\Event\PaymentReceived': events
