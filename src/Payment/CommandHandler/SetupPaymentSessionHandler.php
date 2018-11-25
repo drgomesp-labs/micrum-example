@@ -2,6 +2,7 @@
 
 namespace Mercur\Payment\CommandHandler;
 
+use Mercur\EventSourcing\Aggregate\AggregateRepository;
 use Mercur\Payment\Command\SetupPaymentSession;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
@@ -10,13 +11,28 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
  *
  * @package Mercur\Payment\CommandHandler
  */
-class SetupPaymentSessionHandler implements MessageHandlerInterface
+final class SetupPaymentSessionHandler implements MessageHandlerInterface
 {
 	/**
-	 * @param SetupPaymentSession $command
+	 * @var \Mercur\EventSourcing\Aggregate\AggregateRepository
+	 */
+	private $repository;
+
+	/**
+	 * SetupPaymentSessionHandler constructor.
+	 *
+	 * @param \Mercur\EventSourcing\Aggregate\AggregateRepository $repository
+	 */
+	public function __construct(AggregateRepository $repository)
+	{
+		$this->repository = $repository;
+	}
+
+	/**
+	 * @param \Mercur\Payment\Command\SetupPaymentSession $command
 	 */
 	public function __invoke(SetupPaymentSession $command): void
 	{
-		var_export($command);
+		var_export($this->repository->load($command->payload()['shopId']));
 	}
 }

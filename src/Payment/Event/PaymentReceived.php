@@ -25,7 +25,7 @@ class PaymentReceived extends DomainEvent
 	 * @return self
 	 * @throws \Exception
 	 */
-	public function with(int $amount): self
+	public static function withAmount(int $amount): self
 	{
 		/** @var self $clone */
 		$clone = self::occur(['amount' => $amount]);
@@ -38,10 +38,6 @@ class PaymentReceived extends DomainEvent
 	 */
 	public function amount(): Money
 	{
-		if (empty($this->amount)) {
-			$this->amount = Money::EUR($this->amount);
-		}
-
-		return $this->amount;
+		return $this->amount ?? $this->amount = Money::EUR($this->amount);
 	}
 }

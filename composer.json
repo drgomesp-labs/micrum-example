@@ -11,6 +11,7 @@
     "enqueue/messenger-adapter": "*@dev",
     "enqueue/rdkafka": "^0.9@dev",
     "moneyphp/money": "^3.0@dev",
+    "prooph/event-store": "^7.4@dev",
     "symfony/console": "*@dev",
     "symfony/flex": "^1.1",
     "symfony/framework-bundle": "*",
@@ -19,6 +20,7 @@
     "symfony/yaml": "*"
   },
   "require-dev": {
+    "phpunit/phpunit": "^7.5@dev",
     "symfony/dotenv": "*"
   },
   "config": {

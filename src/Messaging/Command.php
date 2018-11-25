@@ -17,12 +17,13 @@ abstract class Command implements CommandMessage
 	/**
 	 * Command constructor.
 	 *
-	 * @param \Mercur\Messaging\Message\Payload $payload
+	 * @param \Mercur\Messaging\Message\Payload       $payload
+	 * @param \Mercur\Messaging\Message\Metadata|null $metadata
 	 */
-	public function __construct(Payload $payload)
+	public function __construct(Payload $payload, Metadata $metadata = null)
 	{
-		$this->metadata = new Metadata();
 		$this->payload = $payload;
+		$this->metadata = $metadata ?? new Metadata();
 		$this->messageName = get_called_class();
 	}
 

@@ -36,6 +36,6 @@ class NotificationReceivedHandler implements MessageHandlerInterface
 	 */
 	public function __invoke(NotificationReceivedEvent $event): void
 	{
-		$this->eventBus->dispatch(PaymentReceived::occur(['amount' => 333]));
+		$this->eventBus->dispatch(PaymentReceived::withAmount(333));
 	}
 }

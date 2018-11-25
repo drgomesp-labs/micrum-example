@@ -12,4 +12,4 @@ framework:
 
       messenger.bus.events:
         middleware:
-        - Mercur\Messaging\Middleware\TolerateNoHandler
+        - Mercur\Bundle\MessagingBundle\Middleware\TolerateNoHandler

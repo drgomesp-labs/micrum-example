@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Mercur\Messaging\Middleware;
+namespace Mercur\Bundle\MessagingBundle\Middleware;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Envelope;
